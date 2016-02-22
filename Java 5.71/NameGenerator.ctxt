@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.params=first\ last\ mother\ born
+comment0.target=NameGenerator(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ NameGenerator\r\n
+comment1.params=
+comment1.target=void\ Name()
+comment1.text=\r\n\ Return\ your\ Star\ Wars\ name\r\n
+numComments=2
