@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,6 +21,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private ArrayList<Room> history;
         
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +30,8 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        history = new ArrayList<Room>();
+        history.add(currentRoom);
     }
 
     /**
@@ -37,11 +42,11 @@ public class Game
         Room outside, theater, pub, lab, office;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university", "a bucket");
-        theater = new Room("in a lecture theater", "some curtains");
-        pub = new Room("in the campus pub", "a glass of beer");
-        lab = new Room("in a computing lab", "a keyboard");
-        office = new Room("in the computing admin office", "a mouse");
+        outside = new Room("outside", "outside the main entrance of the university");
+        theater = new Room("theater", "in a lecture theater");
+        pub = new Room("pub", "in the campus pub");
+        lab = new Room("lab", "in a computing lab");
+        office = new Room("office", "in the computing admin office");
         
         // initialise room exits
         outside.setExit("east", theater);
@@ -57,7 +62,7 @@ public class Game
 
         office.setExit("west", lab);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = outside;
     }
 
     /**
@@ -115,6 +120,9 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("back")) {
+            back(command);
+        }
         // else command not recognised.
         return wantToQuit;
     }
@@ -157,6 +165,9 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
+            if (currentRoom != null){
+            history.add(currentRoom);
+        }
             System.out.println(currentRoom.getLongDescription());
         }
     }
@@ -175,5 +186,25 @@ public class Game
         else {
             return true;  // signal that we want to quit
         }
+    }
+    
+    /**
+     * The back command.
+     */
+    private void back(Command command)
+    {
+        if(command.hasSecondWord()) {
+            System.out.println("Command not recognized");
+            return;
+        }
+        if(history.size() != 1) {
+        Room lastRoom = history.get(history.size()-2);
+        currentRoom = lastRoom;
+        history.remove(history.size()-1);
+        System.out.println(currentRoom.getLongDescription());
+    }
+    else {
+        System.out.println("No previous rooms");
+    }
     }
 }
